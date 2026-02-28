@@ -1,4 +1,3 @@
-import React from "react";
 import Editor from "@monaco-editor/react";
 
 const EditorSection = ({
@@ -9,7 +8,6 @@ const EditorSection = ({
   editorRef,
   isDarkMode,
 }) => {
-  // Map language to Monaco language identifier
   const getMonacoLanguage = (lang) => {
     const languageMap = {
       javascript: "javascript",
@@ -33,7 +31,6 @@ const EditorSection = ({
             : "bg-white border-[#e0e0e0] shadow-lg shadow-black/5"
         }`}
       >
-        {/* Editor Header */}
         <div
           className={`flex items-center justify-between px-4 py-2.5 border-b flex-shrink-0 ${
             isDarkMode
@@ -76,8 +73,6 @@ const EditorSection = ({
             </span>
           </div>
         </div>
-
-        {/* Monaco Editor */}
         <div className="flex-1 min-h-0">
           <Editor
             height="100%"
@@ -88,7 +83,6 @@ const EditorSection = ({
             onMount={(editor) => {
               editorRef.current = editor;
 
-              // Configure editor options
               editor.updateOptions({
                 fontFamily:
                   "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
