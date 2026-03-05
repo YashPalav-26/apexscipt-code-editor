@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
@@ -79,7 +79,6 @@ const OutputSection = ({
           : "bg-white border-[#e0e0e0] shadow-lg shadow-black/5"
       }`}
     >
-      {/* Resize Handle - Only visible on desktop */}
       <div
         className={`hidden lg:h-1 lg:cursor-ns-resize lg:flex lg:items-center lg:justify-center transition-colors duration-150 ${
           isDarkMode
@@ -93,8 +92,6 @@ const OutputSection = ({
           className={`w-4 h-2 ${isDarkMode ? "text-[#858585]" : "text-gray-400"}`}
         />
       </div>
-
-      {/* Tab Bar */}
       <div
         className={`flex items-center justify-between border-b px-2 flex-shrink-0 ${
           isDarkMode
@@ -130,11 +127,8 @@ const OutputSection = ({
         </div>
 
         <div className="flex items-center space-x-1 flex-shrink-0">
-          {/* Clear Button */}
           <button
-            onClick={() => {
-              // Clear functionality could be added here
-            }}
+            onClick={() => {}}
             className={`p-1.5 rounded transition-colors duration-150 ${
               isDarkMode
                 ? "text-[#858585] hover:bg-[#2d2d2d] hover:text-white"
@@ -146,15 +140,10 @@ const OutputSection = ({
           </button>
         </div>
       </div>
-
-      {/* Tab Content */}
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-        {/* Output Tab */}
         {activeTab === "output" && (
           <OutputWindow output={output} error="" isDarkMode={isDarkMode} />
         )}
-
-        {/* Errors Tab */}
         {activeTab === "errors" && (
           <div className="h-full p-4 overflow-auto">
             {error ? (
@@ -198,8 +187,6 @@ const OutputSection = ({
             )}
           </div>
         )}
-
-        {/* Input Section */}
         <div
           className={`border-t flex-shrink-0 ${
             isDarkMode ? "border-[#3c3c3c]" : "border-[#e0e0e0]"
@@ -211,8 +198,6 @@ const OutputSection = ({
             isDarkMode={isDarkMode}
           />
         </div>
-
-        {/* Run Button */}
         <div
           className={`p-3 border-t flex-shrink-0 ${
             isDarkMode
