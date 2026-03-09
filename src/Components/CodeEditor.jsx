@@ -3,7 +3,7 @@ import Navbar from "./NavBar";
 import EditorSection from "./EditorSection";
 import OutputSection from "./Output";
 import { CODE_SNIPPETS } from "../constants";
-import { executeCode } from "../api";
+import { executeCode } from "../api/api";
 
 const CodeEditor = () => {
   const [language, setLanguage] = useState("javascript");
