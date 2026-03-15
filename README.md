@@ -1,5 +1,3 @@
-<!-- @format -->
-
 <div align="center">
 
 # PhxCode Code Editor
