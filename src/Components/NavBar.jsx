@@ -1,106 +1,191 @@
-import React from "react";
-import ThemeToggle from "./ThemeToggle";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPlay,
+  faMoon,
+  faSun,
+  faSave,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import phxlogo from "../assets/phxlogo.svg";
 
 const Navbar = ({
   language,
   handleLanguageChange,
   theme,
   setTheme,
-  saveCode,
   isDarkMode,
   toggleTheme,
+  onRunCode,
+  onNewFile,
+  saveCode,
 }) => {
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
   const languages = [
-    { label: "JavaScript", value: "javascript" },
-    { label: "Java", value: "java" },
-    { label: "C", value: "c" },
-    { label: "C++", value: "cpp" },
-    { label: "Python", value: "python" },
-    { label: "C#", value: "csharp" },
-    { label: "PHP", value: "php" },
+    { label: "JavaScript", value: "javascript", icon: "JS" },
+    { label: "Java", value: "java", icon: "JV" },
+    { label: "C", value: "c", icon: "C" },
+    { label: "C++", value: "cpp", icon: "C++" },
+    { label: "Python", value: "python", icon: "PY" },
+    { label: "C#", value: "csharp", icon: "C#" },
+    { label: "PHP", value: "php", icon: "PHP" },
+    { label: "TypeScript", value: "typescript", icon: "TS" },
   ];
 
-  const themes = [
-    { label: "VS Dark", value: "vs-dark" },
-    { label: "Light", value: "light" },
-    { label: "HC Black", value: "hc-black" },
-  ];
+  const currentLanguage =
+    languages.find((lang) => lang.value === language) || languages[0];
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
-      <h1
-        className={`text-2xl font-bold ${
-          isDarkMode ? "text-[#fff]" : "text-gray-900"
-        }`}
-      >
-        ApexScript
-      </h1>
-      <div className="flex space-x-4">
-        <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-        <select
-          value={language}
-          onChange={handleLanguageChange}
-          className={`p-2 rounded transition duration-200 focus:outline-none focus:ring-2 ${
-            isDarkMode
-              ? "bg-gray-800 text-white shadow-gray-300 shadow-sm hover:bg-gray-700 focus:ring-gray-300"
-              : "bg-[#ffb25b] text-black shadow-gray-800 shadow-md hover:bg-[#ffc67c] focus:ring-[#ffc67c]"
-          }`}
-        >
-          {languages.map((lang) => (
-            <option
-              key={lang.value}
-              value={lang.value}
-              className={`cursor-pointer hover:bg-gray-700 ${
-                isDarkMode ? "text-white" : "text-black"
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4 lg:px-6 border-b transition-colors duration-200 ${
+        isDarkMode
+          ? "bg-[#1e1e1e] border-[#3c3c3c] text-white"
+          : "bg-white border-[#e0e0e0] text-gray-900"
+      }`}
+    >
+      {/* Left Section: Logo & Branding */}
+      <div className="flex items-center space-x-3 flex-shrink-0">
+        <img
+          src={phxlogo}
+          alt="PhxCode Logo"
+          className="w-8 h-8 flex-shrink-0"
+        />
+        <div className="hidden sm:flex flex-col justify-center">
+          <span className="text-base font-bold leading-tight">PhxCode</span>
+          <span className="text-xs font-medium leading-tight opacity-75">
+            Code Editor
+          </span>
+        </div>
+      </div>
+
+      {/* Center Section: Language Selector & Run Button */}
+      <div className="flex items-center space-x-3 flex-grow justify-center px-4">
+        {/* Language Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+            className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 ${
+              isDarkMode
+                ? "bg-[#2d2d2d] border-[#3c3c3c] hover:bg-[#3c3c3c] focus:ring-[#007acc]"
+                : "bg-gray-50 border-[#e0e0e0] hover:bg-gray-100 focus:ring-[#0066b8]"
+            }`}
+            aria-label="Select programming language"
+          >
+            <span
+              className={`text-xs font-mono font-bold ${
+                isDarkMode ? "text-[#007acc]" : "text-[#0066b8]"
               }`}
             >
-              {lang.label}
-            </option>
-          ))}
-        </select>
-        <select
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-          className={`p-2 rounded transition duration-200 focus:outline-none focus:ring-2 ${
-            isDarkMode
-              ? "bg-gray-800 text-white shadow-gray-300 shadow-sm hover:bg-gray-700 focus:ring-gray-300"
-              : "bg-[#ffb25b] text-black shadow-gray-800 shadow-md hover:bg-[#ffc67c] focus:ring-[#ffc67c]"
-          }`}
-        >
-          {themes.map((themeObj) => (
-            <option
-              key={themeObj.value}
-              value={themeObj.value}
-              className={`cursor-pointer hover:bg-gray-700 ${
-                isDarkMode ? "text-white" : "text-black"
+              {currentLanguage.icon}
+            </span>
+            <span className="text-sm font-medium hidden sm:inline">
+              {currentLanguage.label}
+            </span>
+          </button>
+
+          {isLangDropdownOpen && (
+            <div
+              className={`absolute top-full left-0 mt-2 w-44 rounded-lg shadow-xl border overflow-hidden z-50 ${
+                isDarkMode
+                  ? "bg-[#252526] border-[#3c3c3c]"
+                  : "bg-white border-[#e0e0e0]"
               }`}
             >
-              {themeObj.label}
-            </option>
-          ))}
-        </select>
+              {languages.map((lang) => (
+                <button
+                  key={lang.value}
+                  onClick={() => {
+                    handleLanguageChange({ target: { value: lang.value } });
+                    setIsLangDropdownOpen(false);
+                  }}
+                  className={`w-full px-4 py-2.5 text-left text-sm flex items-center space-x-2 transition-colors duration-150 ${
+                    language === lang.value
+                      ? isDarkMode
+                        ? "bg-[#094771]"
+                        : "bg-[#e8f4fc]"
+                      : isDarkMode
+                        ? "hover:bg-[#2a2d2e]"
+                        : "hover:bg-gray-100"
+                  }`}
+                >
+                  <span
+                    className={`text-xs font-mono font-bold ${
+                      isDarkMode ? "text-[#007acc]" : "text-[#0066b8]"
+                    }`}
+                  >
+                    {lang.icon}
+                  </span>
+                  <span>{lang.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Run Button - Primary CTA */}
         <button
-          className={`rounded-md px-4 py-2 transition duration-200 focus:outline-none focus:ring-2 ${
+          onClick={onRunCode}
+          className={`flex items-center space-x-2 px-5 py-1.5 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 active:scale-95 ${
             isDarkMode
-              ? "bg-gray-800 text-white shadow-gray-300 shadow-sm hover:bg-gray-700 focus:ring-gray-300"
-              : "bg-[#fff] text-black shadow-gray-800 shadow-md hover:bg-gray-200 focus:ring-gray-300"
+              ? "bg-[#2ea44f] hover:bg-[#2c974b] text-white focus:ring-[#2ea44f] focus:ring-offset-[#1e1e1e]"
+              : "bg-[#2ea44f] hover:bg-[#2c974b] text-white focus:ring-[#2ea44f] focus:ring-offset-white"
           }`}
-          onClick={() => alert("New File")}
+          aria-label="Run code (Ctrl+Enter)"
         >
-          New File
-        </button>
-        <button
-          className={`rounded-md px-4 py-2 transition duration-200 focus:outline-none focus:ring-2 ${
-            isDarkMode
-              ? "bg-gray-800 text-white shadow-gray-300 shadow-sm hover:bg-gray-700 focus:ring-gray-300"
-              : "bg-[#fff] text-black shadow-gray-800 shadow-md hover:bg-gray-200 focus:ring-gray-300"
-          }`}
-          onClick={saveCode}
-        >
-          Save Code
+          <FontAwesomeIcon icon={faPlay} className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Run</span>
         </button>
       </div>
-    </div>
+
+      {/* Right Section: Actions */}
+      <div className="flex items-center space-x-2 flex-shrink-0">
+        {/* New File Button */}
+        <button
+          onClick={onNewFile}
+          className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 ${
+            isDarkMode
+              ? "hover:bg-[#2d2d2d] focus:ring-[#007acc]"
+              : "hover:bg-gray-100 focus:ring-[#0066b8]"
+          }`}
+          aria-label="New file"
+          title="Create new file"
+        >
+          <FontAwesomeIcon icon={faPlus} className="w-5 h-5" />
+        </button>
+        {/* Save Button */}
+        <button
+          onClick={saveCode}
+          className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 ${
+            isDarkMode
+              ? "hover:bg-[#2d2d2d] focus:ring-[#007acc]"
+              : "hover:bg-gray-100 focus:ring-[#0066b8]"
+          }`}
+          aria-label="Save code"
+          title="Download code"
+        >
+          <FontAwesomeIcon icon={faSave} className="w-5 h-5" />
+        </button>
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 ${
+            isDarkMode
+              ? "hover:bg-[#2d2d2d] focus:ring-[#007acc]"
+              : "hover:bg-gray-100 focus:ring-[#0066b8]"
+          }`}
+          aria-label={
+            isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+          }
+          title={isDarkMode ? "Light mode" : "Dark mode"}
+        >
+          <FontAwesomeIcon
+            icon={isDarkMode ? faSun : faMoon}
+            className="w-5 h-5"
+          />
+        </button>
+      </div>
+    </nav>
   );
 };
 
