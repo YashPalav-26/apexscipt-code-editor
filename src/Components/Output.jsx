@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import OutputWindow from "./OutputWindow";
 import CustomInput from "./CustomInput";
+import PerformanceMetrics from "./PerformanceMetrics";
 
 const OutputSection = ({
   output,
@@ -17,10 +18,13 @@ const OutputSection = ({
   setInput,
   handleCompileAndExecute,
   isDarkMode,
+  executionTime,
+  memoryUsage,
 }) => {
   const [activeTab, setActiveTab] = useState("output");
   const [panelHeight, setPanelHeight] = useState(250);
   const [isResizing, setIsResizing] = useState(false);
+  const [isMetricsAnimating, setIsMetricsAnimating] = useState(false);
   const containerRef = useRef(null);
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
@@ -69,6 +73,15 @@ const OutputSection = ({
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isResizing]);
+
+  // Trigger metrics animation when they update
+  useEffect(() => {
+    if (executionTime || memoryUsage) {
+      setIsMetricsAnimating(true);
+      const timer = setTimeout(() => setIsMetricsAnimating(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [executionTime, memoryUsage]);
 
   return (
     <div
@@ -140,6 +153,15 @@ const OutputSection = ({
           </button>
         </div>
       </div>
+
+      {/* Performance Metrics Bar */}
+      <PerformanceMetrics
+        executionTime={executionTime}
+        memory={memoryUsage}
+        isDarkMode={isDarkMode}
+        isAnimating={isMetricsAnimating}
+      />
+
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
         {activeTab === "output" && (
           <OutputWindow output={output} error="" isDarkMode={isDarkMode} />
