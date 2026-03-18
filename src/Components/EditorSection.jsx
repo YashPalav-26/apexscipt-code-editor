@@ -1,4 +1,6 @@
+import React from "react";
 import Editor from "@monaco-editor/react";
+import { MONACO_LANGUAGE_MAP } from "../constants/languageConfig";
 
 const EditorSection = ({
   language,
@@ -7,19 +9,10 @@ const EditorSection = ({
   theme,
   editorRef,
   isDarkMode,
+  setIsCodeTouched,
 }) => {
   const getMonacoLanguage = (lang) => {
-    const languageMap = {
-      javascript: "javascript",
-      java: "java",
-      c: "c",
-      cpp: "cpp",
-      python: "python",
-      csharp: "csharp",
-      php: "php",
-      typescript: "typescript",
-    };
-    return languageMap[lang] || "plaintext";
+    return MONACO_LANGUAGE_MAP[lang] || "plaintext";
   };
 
   return (
@@ -78,7 +71,12 @@ const EditorSection = ({
             height="100%"
             language={getMonacoLanguage(language)}
             value={code}
-            onChange={(value) => setCode(value)}
+            onChange={(value) => {
+              setCode(value);
+              if (setIsCodeTouched) {
+                setIsCodeTouched(true);
+              }
+            }}
             theme={theme}
             onMount={(editor) => {
               editorRef.current = editor;
