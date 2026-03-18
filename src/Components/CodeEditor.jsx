@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Navbar from "./NavBar";
 import EditorSection from "./EditorSection";
 import OutputSection from "./Output";
 import ResizableDivider from "./ResizableDivider";
 import useResizablePanel from "../hooks/useResizablePanel";
 import { CODE_SNIPPETS } from "../constants/constants";
+import { getLanguageConfig } from "../constants/languageConfig";
 import { executeCode } from "../api/api";
 
 const CodeEditor = () => {
@@ -17,6 +18,7 @@ const CodeEditor = () => {
   const [error, setError] = useState("");
   const [input, setInput] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isCodeTouched, setIsCodeTouched] = useState(false);
   const editorRef = useRef(null);
 
   const {
@@ -61,10 +63,13 @@ const CodeEditor = () => {
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) return;
 
+    const langConfig = getLanguageConfig(language);
+    const fileExt = langConfig ? langConfig.fileExtension : language;
+
     const blob = new Blob([sourceCode], { type: "text/plain" });
     const link = document.createElement("a");
 
-    const fileName = `code.${language === "javascript" ? "js" : language === "typescript" ? "ts" : language === "csharp" ? "cs" : language}`;
+    const fileName = `code.${fileExt}`;
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
@@ -73,7 +78,12 @@ const CodeEditor = () => {
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
-    setCode(CODE_SNIPPETS[selectedLanguage]);
+
+    // Smart snippet loading: only load snippet if code hasn't been modified
+    if (!isCodeTouched) {
+      setCode(CODE_SNIPPETS[selectedLanguage] || "// Write your code here");
+      setIsCodeTouched(false);
+    }
   };
 
   const toggleTheme = () => {
@@ -87,6 +97,7 @@ const CodeEditor = () => {
     );
     if (confirmed) {
       setCode(CODE_SNIPPETS[language] || "// Write your code here");
+      setIsCodeTouched(false);
       setOutput("");
       setError("");
       setInput("");
@@ -138,6 +149,7 @@ const CodeEditor = () => {
               theme={theme}
               editorRef={editorRef}
               isDarkMode={isDarkMode}
+              setIsCodeTouched={setIsCodeTouched}
             />
           </div>
 
