@@ -1,6 +1,7 @@
 import React from "react";
 import Editor from "@monaco-editor/react";
 import { MONACO_LANGUAGE_MAP } from "../constants/languageConfig";
+import SaveIndicator from "./SaveIndicator";
 
 const EditorSection = ({
   language,
@@ -10,6 +11,8 @@ const EditorSection = ({
   editorRef,
   isDarkMode,
   setIsCodeTouched,
+  isSaved,
+  saveTimestamp,
 }) => {
   const getMonacoLanguage = (lang) => {
     return MONACO_LANGUAGE_MAP[lang] || "plaintext";
@@ -56,7 +59,12 @@ const EditorSection = ({
               UTF-8
             </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            <SaveIndicator
+              isDarkMode={isDarkMode}
+              isSaved={isSaved}
+              timestamp={saveTimestamp}
+            />
             <span
               className={`text-xs ${
                 isDarkMode ? "text-[#858585]" : "text-gray-400"
