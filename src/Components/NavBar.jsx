@@ -7,6 +7,7 @@ import {
   faSave,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { languageConfig } from "../constants/languageConfig";
 import phxlogo from "../assets/phxlogo.svg";
 
 const Navbar = ({
@@ -20,16 +21,12 @@ const Navbar = ({
 }) => {
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
-  const languages = [
-    { label: "JavaScript", value: "javascript", icon: "JS" },
-    { label: "Java", value: "java", icon: "JV" },
-    { label: "C", value: "c", icon: "C" },
-    { label: "C++", value: "cpp", icon: "C++" },
-    { label: "Python", value: "python", icon: "PY" },
-    { label: "C#", value: "csharp", icon: "C#" },
-    { label: "PHP", value: "php", icon: "PHP" },
-    { label: "TypeScript", value: "typescript", icon: "TS" },
-  ];
+  // Create languages array from config, with formatted structure for UI
+  const languages = languageConfig.map((lang) => ({
+    label: lang.label,
+    value: lang.id,
+    icon: lang.icon,
+  }));
 
   const currentLanguage =
     languages.find((lang) => lang.value === language) || languages[0];
@@ -80,7 +77,7 @@ const Navbar = ({
 
           {isLangDropdownOpen && (
             <div
-              className={`absolute top-full left-0 mt-2 w-44 rounded-lg shadow-xl border overflow-hidden z-50 ${
+              className={`absolute top-full left-0 mt-2 rounded-lg shadow-xl border z-50 max-h-96 overflow-y-auto min-w-56 ${
                 isDarkMode
                   ? "bg-[#252526] border-[#3c3c3c]"
                   : "bg-white border-[#e0e0e0]"
@@ -104,13 +101,16 @@ const Navbar = ({
                   }`}
                 >
                   <span
-                    className={`text-xs font-mono font-bold ${
+                    className={`text-xs font-mono font-bold min-w-8 ${
                       isDarkMode ? "text-[#007acc]" : "text-[#0066b8]"
                     }`}
                   >
                     {lang.icon}
                   </span>
-                  <span>{lang.label}</span>
+                  <span className="flex-1">{lang.label}</span>
+                  {language === lang.value && (
+                    <span className={`text-xs font-bold ${isDarkMode ? "text-[#007acc]" : "text-[#0066b8]"}`}>✓</span>
+                  )}
                 </button>
               ))}
             </div>
