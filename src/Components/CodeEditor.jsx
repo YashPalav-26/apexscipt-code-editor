@@ -2,7 +2,9 @@ import React, { useState, useRef } from "react";
 import Navbar from "./NavBar";
 import EditorSection from "./EditorSection";
 import OutputSection from "./Output";
-import { CODE_SNIPPETS } from "../constants";
+import ResizableDivider from "./ResizableDivider";
+import useResizablePanel from "../hooks/useResizablePanel";
+import { CODE_SNIPPETS } from "../constants/constants";
 import { executeCode } from "../api/api";
 
 const CodeEditor = () => {
@@ -16,6 +18,15 @@ const CodeEditor = () => {
   const [input, setInput] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(true);
   const editorRef = useRef(null);
+
+  const {
+    editorWidth,
+    outputWidth,
+    isResizing,
+    handleMouseDown,
+    handleDoubleClick,
+    containerRef,
+  } = useResizablePanel(60);
 
   const handleCompileAndExecute = async () => {
     try {
@@ -105,12 +116,21 @@ const CodeEditor = () => {
         saveCode={saveCode}
       />
 
-      {/* Main Content - Two Panel Layout */}
+      {/* Main Content - Resizable Two Panel Layout */}
       <main className="flex-1 flex flex-col pt-14 overflow-hidden">
-        {/* Desktop: Flex row, Tablet/Mobile: Flex col */}
-        <div className="flex-1 flex flex-col lg:flex-row h-full gap-3 p-4 overflow-hidden">
-          {/* Editor Panel - 70-75% on desktop, full width on smaller */}
-          <div className="flex-1 min-h-0 lg:min-h-auto">
+        {/* Desktop: Resizable flex row, Tablet/Mobile: Flex col */}
+        <div
+          ref={containerRef}
+          className="flex-1 flex flex-col lg:flex-row h-full gap-0 lg:gap-0 p-4 lg:p-4 overflow-hidden"
+        >
+          {/* Editor Panel - Resizable width on desktop */}
+          <div
+            className="flex-1 min-h-0 lg:min-h-auto lg:overflow-hidden"
+            style={{
+              width: `calc(${editorWidth}% - 0.25rem)`,
+              transition: isResizing ? "none" : "width 0.1s ease-out",
+            }}
+          >
             <EditorSection
               language={language}
               code={code}
@@ -121,8 +141,22 @@ const CodeEditor = () => {
             />
           </div>
 
-          {/* Output Panel - 25-30% on desktop, bottom tabs on tablet, stacked on mobile */}
-          <div className="h-64 lg:h-full lg:w-[380px] lg:flex-shrink-0">
+          {/* Resizable Divider */}
+          <ResizableDivider
+            isDarkMode={isDarkMode}
+            isResizing={isResizing}
+            onMouseDown={handleMouseDown}
+            onDoubleClick={handleDoubleClick}
+          />
+
+          {/* Output Panel - Resizable width on desktop */}
+          <div
+            className="h-64 lg:h-full lg:min-h-auto lg:overflow-hidden"
+            style={{
+              width: `calc(${outputWidth}% - 0.25rem)`,
+              transition: isResizing ? "none" : "width 0.1s ease-out",
+            }}
+          >
             <OutputSection
               output={output}
               error={error}
