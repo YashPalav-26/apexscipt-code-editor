@@ -67,6 +67,7 @@ export const executeCode = async (language, sourceCode, input = "") => {
     result.error = result.run.stderr;
     result.compileError = result.compile.stderr;
     result.executionTime = response.data.executionTime || "N/A";
+    result.memoryUsage = response.data.memoryUsage || response.data.memory || null;
 
     return result;
   } catch (error) {
