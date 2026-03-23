@@ -14,6 +14,8 @@ import PerformanceMetrics from "./PerformanceMetrics";
 const OutputSection = ({
   output,
   error,
+  setOutput,
+  setError,
   input,
   setInput,
   handleCompileAndExecute,
@@ -28,6 +30,12 @@ const OutputSection = ({
   const containerRef = useRef(null);
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
+
+  // Handle clearing output and errors
+  const handleClearOutput = () => {
+    setOutput("");
+    setError("");
+  };
 
   const tabs = [
     { id: "output", label: "Output", icon: faTerminal },
@@ -141,13 +149,14 @@ const OutputSection = ({
 
         <div className="flex items-center space-x-1 flex-shrink-0">
           <button
-            onClick={() => {}}
+            onClick={handleClearOutput}
             className={`p-1.5 rounded transition-colors duration-150 ${
               isDarkMode
                 ? "text-[#858585] hover:bg-[#2d2d2d] hover:text-white"
                 : "text-gray-500 hover:bg-gray-200 hover:text-gray-900"
             }`}
             aria-label="Clear output"
+            title="Clear output and errors"
           >
             <FontAwesomeIcon icon={faTrashAlt} className="w-3.5 h-3.5" />
           </button>

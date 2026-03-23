@@ -235,6 +235,8 @@ const CodeEditor = () => {
             <OutputSection
               output={output}
               error={error}
+              setOutput={setOutput}
+              setError={setError}
               input={input}
               setInput={setInput}
               handleCompileAndExecute={handleCompileAndExecute}
