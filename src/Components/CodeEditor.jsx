@@ -5,26 +5,40 @@ import OutputSection from "./Output";
 import ResizableDivider from "./ResizableDivider";
 import useResizablePanel from "../hooks/useResizablePanel";
 import useLocalStorage from "../hooks/useLocalStorage";
+import useThemeCustomization from "../hooks/useThemeCustomization";
+import { ThemeProvider } from "../context/ThemeContext.jsx";
 import { CODE_SNIPPETS } from "../constants/constants";
 import { getLanguageConfig } from "../constants/languageConfig";
 import { executeCode } from "../api/api";
 
 const CodeEditor = () => {
   const [language, setLanguage] = useState("javascript");
-  const [theme, setTheme] = useState("vs-dark");
   const [code, setCode] = useState(
     CODE_SNIPPETS[language] || "// Write your code here",
   );
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const [input, setInput] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isCodeTouched, setIsCodeTouched] = useState(false);
   const [executionTime, setExecutionTime] = useState(null);
   const [memoryUsage, setMemoryUsage] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [saveTimestamp, setSaveTimestamp] = useState(null);
   const editorRef = useRef(null);
+
+  // Use theme customization hook
+  const {
+    theme,
+    setTheme,
+    fontSize,
+    setFontSize,
+    fontFamily,
+    setFontFamily,
+    isDark,
+    themeColors,
+    currentTheme,
+    currentFontFamily,
+  } = useThemeCustomization();
 
   // Initialize localStorage hook for current language
   const localStorage = useLocalStorage(
@@ -143,8 +157,8 @@ const CodeEditor = () => {
   };
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    setTheme(isDarkMode ? "light" : "vs-dark");
+    const newTheme = isDark ? "vs-light" : "vs-dark";
+    setTheme(newTheme);
   };
 
   const handleNewFile = () => {
@@ -165,24 +179,39 @@ const CodeEditor = () => {
     }
   };
 
+  const themeContextValue = {
+    isDark,
+    theme,
+    themeColors,
+    fontSize,
+    fontFamily: currentFontFamily?.value,
+    currentTheme,
+  };
+
   return (
-    <div
-      className={`min-h-screen w-full flex flex-col ${
-        isDarkMode ? "bg-[#1e1e1e] text-white" : "bg-[#f5f5f5] text-gray-900"
-      }`}
-    >
-      {/* Navbar */}
-      <Navbar
-        language={language}
-        handleLanguageChange={handleLanguageChange}
-        theme={theme}
-        setTheme={setTheme}
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-        onRunCode={handleCompileAndExecute}
-        onNewFile={handleNewFile}
-        saveCode={saveCode}
-      />
+    <ThemeProvider value={themeContextValue}>
+      <div
+        className={`min-h-screen w-full flex flex-col ${
+          isDark ? "bg-[#1e1e1e] text-white" : "bg-[#f5f5f5] text-gray-900"
+        }`}
+      >
+        {/* Navbar */}
+        <Navbar
+          language={language}
+          handleLanguageChange={handleLanguageChange}
+          theme={theme}
+          setTheme={setTheme}
+          onThemeChange={setTheme}
+          fontSize={fontSize}
+          onFontSizeChange={setFontSize}
+          fontFamily={fontFamily}
+          onFontFamilyChange={setFontFamily}
+          isDarkMode={isDark}
+          toggleTheme={toggleTheme}
+          onRunCode={handleCompileAndExecute}
+          onNewFile={handleNewFile}
+          saveCode={saveCode}
+        />
 
       {/* Main Content - Resizable Two Panel Layout */}
       <main className="flex-1 flex flex-col pt-14 overflow-hidden">
@@ -204,8 +233,10 @@ const CodeEditor = () => {
               code={code}
               setCode={setCode}
               theme={theme}
+              fontSize={fontSize}
+              fontFamily={currentFontFamily?.value}
               editorRef={editorRef}
-              isDarkMode={isDarkMode}
+              isDarkMode={isDark}
               setIsCodeTouched={setIsCodeTouched}
               isSaved={isSaved}
               saveTimestamp={saveTimestamp}
@@ -214,7 +245,7 @@ const CodeEditor = () => {
 
           {/* Resizable Divider */}
           <ResizableDivider
-            isDarkMode={isDarkMode}
+            isDarkMode={isDark}
             isResizing={isResizing}
             onMouseDown={handleMouseDown}
             onDoubleClick={handleDoubleClick}
@@ -236,7 +267,7 @@ const CodeEditor = () => {
               input={input}
               setInput={setInput}
               handleCompileAndExecute={handleCompileAndExecute}
-              isDarkMode={isDarkMode}
+              isDarkMode={isDark}
               executionTime={executionTime}
               memoryUsage={memoryUsage}
             />
@@ -244,6 +275,7 @@ const CodeEditor = () => {
         </div>
       </main>
     </div>
+    </ThemeProvider>
   );
 };
 

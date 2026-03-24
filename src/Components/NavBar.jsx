@@ -8,11 +8,18 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { languageConfig } from "../constants/languageConfig";
+import CustomizationPanel from "./CustomizationPanel";
 import phxlogo from "../assets/phxlogo.svg";
 
 const Navbar = ({
   language,
   handleLanguageChange,
+  theme,
+  onThemeChange,
+  fontSize,
+  onFontSizeChange,
+  fontFamily,
+  onFontFamilyChange,
   isDarkMode,
   toggleTheme,
   onRunCode,
@@ -154,6 +161,15 @@ const Navbar = ({
         >
           <FontAwesomeIcon icon={faSave} className="w-5 h-5" />
         </button>
+        <CustomizationPanel
+          theme={theme}
+          fontSize={fontSize}
+          fontFamily={fontFamily}
+          onThemeChange={onThemeChange}
+          onFontSizeChange={onFontSizeChange}
+          onFontFamilyChange={onFontFamilyChange}
+          isDarkMode={isDarkMode}
+        />
         <button
           onClick={toggleTheme}
           className={`p-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 ${
