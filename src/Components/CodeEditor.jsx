@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Navbar from "./NavBar";
 import EditorSection from "./EditorSection";
 import OutputSection from "./Output";
@@ -108,20 +108,19 @@ const CodeEditor = () => {
         setMemoryUsage(result.memoryUsage);
       }
 
-      // Check if there's stderr output (errors)
       if (result.run && result.run.stderr) {
         setError(result.run.stderr);
-        setOutput(""); // Clear output if there's an error
+        setOutput(""); 
       } else if (result.run && result.run.stdout) {
         setOutput(result.run.stdout);
-        setError(""); // Clear error if execution was successful
+        setError(""); 
       } else {
         setOutput("No output");
         setError("");
       }
     } catch (err) {
       setError(err.message);
-      setOutput(""); // Clear output on exception
+      setOutput(""); 
       setExecutionTime(null);
       setMemoryUsage(null);
     }
@@ -149,7 +148,6 @@ const CodeEditor = () => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
 
-    // Smart snippet loading: only load snippet if code hasn't been modified
     if (!isCodeTouched) {
       setCode(CODE_SNIPPETS[selectedLanguage] || "// Write your code here");
       setIsCodeTouched(false);
@@ -215,7 +213,6 @@ const CodeEditor = () => {
 
       {/* Main Content - Resizable Two Panel Layout */}
       <main className="flex-1 flex flex-col pt-14 overflow-hidden">
-        {/* Desktop: Resizable flex row, Tablet/Mobile: Flex col */}
         <div
           ref={containerRef}
           className="flex-1 flex flex-col lg:flex-row h-full gap-0 lg:gap-0 p-4 lg:p-4 overflow-hidden"
