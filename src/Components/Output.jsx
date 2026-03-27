@@ -215,10 +215,11 @@ const OutputSection = ({
         >
           <button
             onClick={handleCompileAndExecute}
-            className={`w-full flex items-center justify-center space-x-2 py-2.5 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 active:scale-95 ${isDarkMode
-                ? "bg-[#2ea44f] hover:bg-[#2c974b] text-[var(--theme-fg)] focus:ring-[#2ea44f] focus:ring-offset-[#1e1e1e]"
-                : "bg-[#2ea44f] hover:bg-[#2c974b] text-[var(--theme-fg)] focus:ring-[#2ea44f] focus:ring-offset-white"
-              }`}
+            className={`w-full flex items-center justify-center space-x-2 py-2.5 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 shadow-sm ${
+              isDarkMode
+                ? "bg-[var(--theme-accent)] hover:brightness-110 text-white focus:ring-[var(--theme-accent)] focus:ring-offset-[var(--theme-sidebar)]"
+                : "bg-[var(--theme-accent)] hover:brightness-110 text-white focus:ring-[var(--theme-accent)] focus:ring-offset-[var(--theme-sidebar)]"
+            }`}
           >
             <FontAwesomeIcon icon={faPlay} className="w-4 h-4" />
             <span>Run Code</span>

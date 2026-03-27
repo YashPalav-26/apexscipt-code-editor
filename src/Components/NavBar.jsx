@@ -113,10 +113,11 @@ const Navbar = ({
         </div>
         <button
           onClick={onRunCode}
-          className={`flex items-center space-x-2 px-5 py-1.5 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 active:scale-95 ${isDarkMode
-              ? "bg-[#2ea44f] hover:bg-[#2c974b] text-[var(--theme-fg)] focus:ring-[#2ea44f] focus:ring-offset-[#1e1e1e]"
-              : "bg-[#2ea44f] hover:bg-[#2c974b] text-[var(--theme-fg)] focus:ring-[#2ea44f] focus:ring-offset-white"
-            }`}
+          className={`flex items-center space-x-2 px-5 py-1.5 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95 shadow-sm ${
+            isDarkMode
+              ? "bg-[var(--theme-accent)] hover:brightness-110 text-white focus:ring-[var(--theme-accent)] focus:ring-offset-[var(--theme-bg)]"
+              : "bg-[var(--theme-accent)] hover:brightness-110 text-white focus:ring-[var(--theme-accent)] focus:ring-offset-[var(--theme-bg)]"
+          }`}
           aria-label="Run code (Ctrl+Enter)"
         >
           <FontAwesomeIcon icon={faPlay} className="w-3.5 h-3.5" />
