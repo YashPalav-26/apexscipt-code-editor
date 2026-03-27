@@ -1,7 +1,3 @@
-/**
- * Font families and sizes configurations
- */
-
 export const fontFamilies = [
   {
     id: "jetbrains-mono",
@@ -30,16 +26,10 @@ export const fontFamilies = [
   },
 ];
 
-/**
- * Get font family by ID
- */
 export const getFontFamilyById = (fontId) => {
   return fontFamilies.find((f) => f.id === fontId) || fontFamilies[0];
 };
 
-/**
- * Font size range configuration
- */
 export const fontSizeConfig = {
   min: 12,
   max: 24,
@@ -47,9 +37,6 @@ export const fontSizeConfig = {
   step: 1,
 };
 
-/**
- * Validate and constrain font size
- */
 export const validateFontSize = (size) => {
   const numSize = parseInt(size);
   if (isNaN(numSize)) return fontSizeConfig.default;

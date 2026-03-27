@@ -11,9 +11,9 @@ export const languageConfig = [
     codeSnippet: `function greetYash(name) {
   console.log("Hello, " + name + "!");
 }
-
 greetYash("Yash");`,
   },
+
   {
     id: "typescript",
     label: "TypeScript",
@@ -232,11 +232,6 @@ greet_yash "Yash"`,
   },
 ];
 
-/**
- * Create lookup objects for efficient access
- * These are derived from languageConfig and should not be modified manually
- */
-
 export const createLanguageMaps = () => {
   const versions = {};
   const languageMap = {};
@@ -261,38 +256,23 @@ export const createLanguageMaps = () => {
   };
 };
 
-/**
- * Helper function to get language config by ID
- */
 export const getLanguageConfig = (languageId) => {
   return languageConfig.find((lang) => lang.id === languageId);
 };
 
-/**
- * Helper function to validate if a language is supported
- */
 export const isLanguageSupported = (languageId) => {
   return languageConfig.some((lang) => lang.id === languageId);
 };
 
-/**
- * Get all languages grouped by category
- */
 export const getLanguagesByCategory = (category) => {
   return languageConfig.filter((lang) => lang.category === category);
 };
 
-/**
- * Get all unique categories
- */
 export const getLanguageCategories = () => {
   const categories = new Set(languageConfig.map((lang) => lang.category));
   return Array.from(categories);
 };
 
-/**
- * For backward compatibility, export the maps directly
- */
 export const {
   LANGUAGE_VERSIONS,
   LANGUAGE_MAP,
