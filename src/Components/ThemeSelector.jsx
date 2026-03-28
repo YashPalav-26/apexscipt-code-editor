@@ -10,7 +10,6 @@ const ThemeSelector = ({ currentTheme, onThemeChange, isDarkMode }) => {
 
   const themes = useMemo(() => getAvailableThemes(), []);
   
-  // currentTheme can be a string id. Let's find its label if possible.
   const activeLabel = useMemo(() => {
     const active = themes.find((t) => t.id === currentTheme);
     return active ? active.label : "Theme";
